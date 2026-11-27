@@ -1,5 +1,5 @@
-const CACHE = 'organizer-v2.1';
-const FILES = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-512.png', './splash.jpg'];
+const CACHE = 'organizer-v2.2';
+const FILES = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png', './splash.jpg'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
 });
