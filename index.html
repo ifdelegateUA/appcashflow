@@ -75,7 +75,7 @@ button{cursor:pointer;border:0;background:none}
 .mi .ti svg{width:1.625rem;height:1.625rem}
 .mi .tx{flex:1}
 .mi .tx b{display:block;font-size:1.125rem}
-.mi .tx span{display:block;font-size:.875rem;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mi .tx>span{display:block;font-size:.875rem;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mi .chev{width:1.25rem;height:1.25rem;color:var(--mute);flex:none}
 .mi.minor{min-height:3.5rem;background:transparent;border:1px solid var(--line)}
 .mi.minor .ti{width:2.25rem;height:2.25rem;border-radius:.625rem;background:var(--card);color:var(--ink)}
@@ -127,6 +127,24 @@ button{cursor:pointer;border:0;background:none}
 .addrow{width:100%;min-height:3rem;border-radius:.875rem;border:.09375rem dashed var(--line);color:var(--pri);font-weight:600;margin-top:.5rem}
 .hint{font-size:.875rem;color:var(--mute);margin:.125rem 0 0}
 .from{font-size:.8125rem;font-weight:400;color:var(--mute)}
+.seg.wrap button{line-height:1.15;padding:.25rem .375rem}
+/* incognito: blur every money figure */
+.num{transition:filter .2s}
+body.incog .num,body.incog .line .v,body.incog .bal,body.incog .sum b,body.incog .stack{filter:blur(.55rem);user-select:none;-webkit-user-select:none}
+#incBtn.on{color:var(--pri);background:color-mix(in srgb,var(--pri) 12%,transparent)}
+/* wishlist */
+.wtot{display:flex;flex-direction:column;gap:.125rem}
+.wtot b{font-size:1.75rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,10rem),1fr));gap:.625rem;margin-top:.75rem}
+.wc{background:var(--card);border-radius:1rem;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.wc::before{content:"";height:.375rem;background:#d9822b}
+.wc .wb{text-align:left;padding:.75rem .875rem .5rem;flex:1;display:flex;flex-direction:column;gap:.25rem}
+.wc .wb b{font-size:1.0625rem;line-height:1.25;overflow-wrap:anywhere}
+.wc .wb .amt{font-size:1.25rem;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;margin-top:auto;padding-top:.375rem}
+.wc a{display:flex;align-items:center;gap:.375rem;min-height:2.75rem;padding:0 .875rem;border-top:1px solid var(--line);color:var(--pri);font-weight:600;font-size:.875rem;text-decoration:none}
+.wc a span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+.wc a svg{width:1rem;height:1rem;flex:none}
+.wc .nolink{min-height:2.75rem;padding:0 .875rem;border-top:1px solid var(--line);display:flex;align-items:center;font-size:.875rem;color:var(--mute)}
 /* notes */
 .search{width:100%;min-height:2.75rem;border-radius:.75rem;border:0;background:var(--card);padding:0 .875rem;font-size:1rem}
 .note{display:block;width:100%;text-align:left}
@@ -176,6 +194,7 @@ textarea.f{min-height:6.875rem;resize:vertical}
 <header>
   <button class="icon back" id="backBtn" aria-label="Back to Home" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button>
   <h1 id="ttl">Home</h1>
+  <button class="icon" id="incBtn" aria-label="Incognito mode" aria-pressed="false" hidden></button>
   <button class="icon" id="setBtn" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
 </header>
 
@@ -191,7 +210,7 @@ textarea.f{min-height:6.875rem;resize:vertical}
     <button class="mi" data-go="tasks"><span class="ti" style="background:#2457d6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M8 13l3 3 5-6"/></svg></span><span class="tx"><b>To Do Tasks</b><span id="sumTasks"></span></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button>
     <button class="mi" data-go="cash"><span class="ti" style="background:#1f8a5b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2.5" y="6" width="19" height="13" rx="3"/><path d="M2.5 10h19M16 15h2"/></svg></span><span class="tx"><b>Cashflow</b><span id="sumCash"></span></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button>
     <button class="mi" data-go="notes"><span class="ti" style="background:#e5484d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3h9l4 4v14H6z"/><path d="M9 11h7M9 15h7M9 7h3"/></svg></span><span class="tx"><b>Notes</b><span id="sumNotes"></span></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button>
-    <button class="mi minor" id="menuSet"><span class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></span><span class="tx"><b>Settings</b></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button>
+    <button class="mi" data-go="wish"><span class="ti" style="background:#d9822b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8c-1.5-3-6-4-6-1.5S9.5 8 12 8zm0 0c1.5-3 6-4 6-1.5S14.5 8 12 8z"/></svg></span><span class="tx"><b>Wishlist</b><span id="sumWish"></span></span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button>
   </div>
 </section>
 
@@ -208,8 +227,6 @@ textarea.f{min-height:6.875rem;resize:vertical}
     <div class="grid" id="grid"></div>
     <h2 id="dayTtl"></h2>
     <div class="list" id="dayList"></div>
-    <h2>Upcoming</h2>
-    <div class="list" id="upList"></div>
   </div>
   <div class="pane" id="listPane">
     <div class="seg sub" id="doneSeg"><button data-v="planned" class="on">Planned</button><button data-v="done">Completed</button></div>
@@ -219,14 +236,14 @@ textarea.f{min-height:6.875rem;resize:vertical}
 
 <!-- CASHFLOW -->
 <section id="cash" class="view">
-  <div class="seg" id="cashSeg"><button data-p="lifePane" class="on">Where are you in life?</button><button data-p="monthPane">This month</button></div>
+  <div class="seg wrap" id="cashSeg"><button data-p="lifePane" class="on">Where are you in life?</button><button data-p="monthPane">This month</button><button data-p="savePane">Savings</button></div>
   <div class="pane on" id="lifePane">
     <p class="hint">Your regular monthly income and the expenses you must pay every month.</p>
     <div class="mute small" style="margin-top:.875rem">Left each month after must-pay expenses</div>
     <div class="bal" id="lifeBal"></div>
     <div class="two" style="margin-top:.75rem">
-      <div class="card"><span class="mute small">Income</span><b class="big inc" id="lifeInc"></b></div>
-      <div class="card"><span class="mute small">Must-pay expenses</span><b class="big exp" id="lifeFix"></b></div>
+      <div class="card"><span class="mute small">Income</span><b class="big inc num" id="lifeInc"></b></div>
+      <div class="card"><span class="mute small">Must-pay expenses</span><b class="big exp num" id="lifeFix"></b></div>
     </div>
     <h2>Income</h2>
     <div class="list" id="incList"></div>
@@ -258,6 +275,23 @@ textarea.f{min-height:6.875rem;resize:vertical}
     <h2>Must-pay expenses <span class="from">from “Where are you in life?”</span></h2>
     <div class="list" id="mFixList"></div>
   </div>
+  <div class="pane" id="savePane">
+    <div class="mute small">Total savings</div>
+    <div class="bal num" id="sTotal"></div>
+    <div class="two" style="margin-top:.75rem">
+      <button class="card" id="sStartBtn" style="text-align:left"><span class="mute small">Starting amount · edit</span><b class="big num" id="sStart"></b></button>
+      <div class="card"><span class="mute small">Added this month</span><b class="big inc num" id="sMonth"></b></div>
+    </div>
+    <h2>Top-ups</h2>
+    <div class="list" id="topList"></div>
+    <button class="addrow" id="addTop">+ Add top-up</button>
+  </div>
+</section>
+
+<!-- WISHLIST -->
+<section id="wish" class="view">
+  <div class="card wtot"><span class="mute small">Total for all wishes</span><b class="num" id="wTotal"></b><span class="mute small" id="wCount"></span></div>
+  <div class="wgrid" id="wishList"></div>
 </section>
 
 <!-- NOTES -->
@@ -275,7 +309,7 @@ textarea.f{min-height:6.875rem;resize:vertical}
 
 <script>
 {
-const APP_VERSION='2.2';
+const APP_VERSION='2.3';
 const KEY='organizer.v2',OLD='organizer.v1';
 const $=s=>document.querySelector(s);
 const $$=s=>document.querySelectorAll(s);
@@ -296,10 +330,10 @@ const fm=v=>{const a=Math.abs(Math.round(v*100)/100);return (v<0?'−':'')+'₴'
 const num=s=>Math.round(parseFloat(String(s).replace(/\s/g,'').replace(',','.'))*100)/100;
 const USER_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>';
 
-let db={events:[],life:{income:[],fixed:[]},plan:[],notes:[],profile:{first:'',last:'',goal:'',photo:''},settings:{font:120,theme:'system'}};
+let db={events:[],life:{income:[],fixed:[]},plan:[],notes:[],wish:[],savings:{start:0,tops:[]},profile:{first:'',last:'',goal:'',photo:''},settings:{font:120,theme:'system',incog:false}};
 try{
   const raw=localStorage.getItem(KEY);
-  if(raw){const d=JSON.parse(raw);db=Object.assign(db,d);db.profile=Object.assign({first:'',last:'',goal:'',photo:''},d.profile);db.settings=Object.assign({font:120,theme:'system'},d.settings)}
+  if(raw){const d=JSON.parse(raw);db=Object.assign(db,d);db.profile=Object.assign({first:'',last:'',goal:'',photo:''},d.profile);db.settings=Object.assign({font:120,theme:'system',incog:false},d.settings);db.savings=Object.assign({start:0,tops:[]},d.savings);if(!Array.isArray(db.wish))db.wish=[]}
   else{const o=localStorage.getItem(OLD);if(o){const d=JSON.parse(o);
     db.events=(d.events||[]).map(e=>Object.assign({done:false},e));db.notes=d.notes||[];
     db.plan=(d.tx||[]).filter(t=>t.type==='exp').map(t=>({id:t.id,month:t.date.slice(0,7),name:t.note||t.cat,amount:t.amount,cat:'Other',date:t.date}));}}
@@ -338,11 +372,11 @@ function closeSheet(){if(onClose){const f=onClose;onClose=null;f()}$('#scrim').c
 $('#scrim').addEventListener('click',closeSheet);
 
 /* ---------- navigation (Home menu, hash-based so the iPhone back swipe works) ---------- */
-const TT={home:'Home',tasks:'To Do Tasks',cash:'Cashflow',notes:'Notes'};
+const TT={home:'Home',tasks:'To Do Tasks',cash:'Cashflow',notes:'Notes',wish:'Wishlist'};
 function show(v){
   if(!TT[v])v='home';view=v;
   $$('.view').forEach(s=>s.classList.toggle('on',s.id===v));
-  $('#ttl').textContent=TT[v];$('#backBtn').hidden=v==='home';
+  $('#ttl').textContent=TT[v];$('#backBtn').hidden=v==='home';$('#incBtn').hidden=!(v==='cash'||v==='wish');
   updFab();window.scrollTo(0,0);
   if(v==='home')renderHome();
 }
@@ -354,11 +388,17 @@ $('#backBtn').addEventListener('click',()=>go('home'));
 if(location.hash)history.replaceState(null,'',location.pathname+location.search);
 
 function updFab(){$('#fab').hidden=view==='home'||(view==='cash'&&cashPane==='lifePane')}
+/* incognito */
+const EYE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+const EYE_OFF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 5.1A10 10 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-3.2 4.1M6.6 6.6A17 17 0 0 0 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6M9.9 9.9a3 3 0 0 0 4.2 4.2M3 3l18 18"/></svg>';
+function applyIncog(){const on=!!db.settings.incog;document.body.classList.toggle('incog',on);$('#incBtn').innerHTML=on?EYE_OFF:EYE;$('#incBtn').classList.toggle('on',on);$('#incBtn').setAttribute('aria-pressed',on);$('#incBtn').setAttribute('aria-label',on?'Show numbers':'Hide numbers (incognito)')}
+$('#incBtn').addEventListener('click',()=>{db.settings.incog=!db.settings.incog;save();applyIncog();toast(db.settings.incog?'Incognito on — numbers hidden':'Incognito off — numbers visible')});
+applyIncog();
 function seg(id,cb){$(id).addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$(id+' button').forEach(x=>x.classList.toggle('on',x===b));cb(b)})}
 seg('#taskSeg',b=>{taskPane=b.dataset.p;$$('#tasks .pane').forEach(p=>p.classList.toggle('on',p.id===taskPane));renderTasks()});
 seg('#doneSeg',b=>{doneView=b.dataset.v;renderTaskList()});
 seg('#cashSeg',b=>{cashPane=b.dataset.p;$$('#cash .pane').forEach(p=>p.classList.toggle('on',p.id===cashPane));updFab();renderCash()});
-$('#fab').addEventListener('click',()=>{if(view==='tasks')eventForm();else if(view==='cash')planForm();else if(view==='notes')noteForm()});
+$('#fab').addEventListener('click',()=>{if(view==='tasks')eventForm();else if(view==='cash'){cashPane==='savePane'?topForm():planForm()}else if(view==='notes')noteForm();else if(view==='wish')wishForm()});
 
 /* ---------- HOME / PROFILE ---------- */
 function avaHtml(p){
@@ -375,11 +415,11 @@ function renderHome(){
   const next=pl.find(e=>e.date>=t),late=pl.filter(e=>e.date<t).length;
   $('#sumTasks').textContent=pl.length?pl.length+' planned'+(late?' · '+late+' overdue':'')+(next?' · next: '+next.title:''):'No planned tasks';
   const k=mKey(new Date()),bal=sumOf(db.life.income)-sumOf(db.life.fixed)-sumOf(db.plan.filter(x=>x.month===k));
-  $('#sumCash').textContent=(db.life.income.length||db.plan.length)?'This month: '+fm(bal)+' left':'Set up your income and expenses';
+  $('#sumCash').innerHTML=(db.life.income.length||db.plan.length)?'This month: <span class="num">'+esc(fm(bal))+'</span> left':'Set up your income and expenses';
+  $('#sumWish').innerHTML=db.wish.length?db.wish.length+(db.wish.length===1?' wish':' wishes')+' · <span class="num">'+esc(fm(sumOf(db.wish)))+'</span>':'Add the things you dream about';
   $('#sumNotes').textContent=db.notes.length?db.notes.length+(db.notes.length===1?' note':' notes'):'No notes yet';
 }
 ['#hAva','#hName','#hGoal'].forEach(s=>$(s).addEventListener('click',profileForm));
-$('#menuSet').addEventListener('click',settingsSheet);
 
 function resizeImage(file,max){return new Promise((res,rej)=>{
   const url=URL.createObjectURL(file),img=new Image();
@@ -435,8 +475,6 @@ function renderCal(){
   $('#dayTtl').textContent=(sel===t?'Today · ':'')+dayLabel(sel);
   const dl=db.events.filter(e=>e.date===sel).sort(evSort);
   $('#dayList').innerHTML=dl.length?dl.map(e=>taskItem(e,false)).join(''):'<div class="empty">Nothing planned. Tap “+” to add a task.</div>';
-  const up=db.events.filter(e=>!e.done&&e.date>=t).sort(evSort).slice(0,5);
-  $('#upList').innerHTML=up.length?up.map(e=>taskItem(e,true)).join(''):'<div class="empty">No upcoming tasks.</div>';
 }
 function renderTaskList(){
   const pl=db.events.filter(e=>!e.done),dn=db.events.filter(e=>e.done);
@@ -570,7 +608,77 @@ function renderMonth(){
   $('#mIncList').innerHTML=db.life.income.length?db.life.income.map(x=>lineItem(x,'','inc',true)).join(''):'<div class="empty">No income yet — add it in “Where are you in life?”.</div>';
   $('#mFixList').innerHTML=db.life.fixed.length?db.life.fixed.map(x=>lineItem(x,'','exp',true)).join(''):'<div class="empty">No must-pay expenses yet.</div>';
 }
-function renderCash(){renderLife();renderMonth()}
+function renderSavings(){
+  const sv=db.savings,k=mKey(new Date());
+  const tops=[...sv.tops].sort((a,b)=>b.date.localeCompare(a.date)||b.ts-a.ts);
+  const total=sv.start+sumOf(sv.tops),mon=sumOf(sv.tops.filter(t=>t.date.slice(0,7)===k));
+  $('#sTotal').textContent=fm(total);$('#sStart').textContent=fm(sv.start);$('#sMonth').textContent=(mon>0?'+':'')+fm(mon);
+  $('#sMonth').className='big num '+(mon<0?'exp':'inc');
+  $('#topList').innerHTML=tops.length?tops.map(t=>`<button class="card line" data-top="${esc(t.id)}"><span class="sp"><b>${t.amount<0?'Withdrawal':'Top-up'}</b><div class="mute small">${esc(shortDate(t.date)+' '+t.date.slice(0,4))}${t.note?' · '+esc(t.note):''}</div></span><span class="v ${t.amount<0?'exp':'inc'}">${t.amount<0?'':'+'}${fm(t.amount)}</span></button>`).join(''):'<div class="empty">Every time you put money aside, add a top-up here.</div>';
+}
+function renderCash(){renderLife();renderMonth();renderSavings()}
+$('#sStartBtn').addEventListener('click',()=>{
+  openSheet(`<h3>Savings you have now</h3><p class="hint">How much you have saved before you started tracking top-ups.</p>
+  <label for="svA">Amount, ₴</label><input class="f big-amt" id="svA" inputmode="decimal" placeholder="0" value="${db.savings.start||''}">
+  <div class="acts"><button class="btn" id="svSave">Save</button><button class="btn ghost" id="svCancel">Cancel</button></div>`);
+  $('#svCancel').onclick=closeSheet;
+  $('#svSave').onclick=()=>{const v=$('#svA').value.trim()===''?0:num($('#svA').value);if(!(v>=0)){toast('Enter an amount');return}db.savings.start=v;save();closeSheet();renderSavings()};
+  setTimeout(()=>$('#svA').focus(),250);
+});
+$('#addTop').addEventListener('click',()=>topForm());
+function topForm(t){
+  const it=t||{id:'',amount:'',date:today(),note:''};let neg=t?t.amount<0:false;
+  openSheet(`<h3>${t?'Edit':'Add'} ${neg?'withdrawal':'top-up'}</h3>
+  <div class="seg" id="tType"><button data-t="in" class="${neg?'':'on'}">Top-up</button><button data-t="out" class="${neg?'on':''}">Withdrawal</button></div>
+  <label for="tA">Amount, ₴</label><input class="f big-amt" id="tA" inputmode="decimal" placeholder="0" value="${it.amount===''?'':Math.abs(it.amount)}">
+  <label for="tD">Date</label><input class="f" type="date" id="tD" value="${esc(it.date)}">
+  <label for="tN">Comment</label><input class="f" id="tN" value="${esc(it.note)}" placeholder="Optional, e.g. From salary">
+  <div class="acts"><button class="btn" id="tSave">Save</button><button class="btn ghost" id="tCancel">Cancel</button></div>
+  ${t?'<div class="acts"><button class="btn danger" id="tDel">Delete</button></div>':''}`);
+  $('#tType').onclick=e=>{const b=e.target.closest('button');if(!b)return;neg=b.dataset.t==='out';$$('#tType button').forEach(x=>x.classList.toggle('on',x===b))};
+  $('#tCancel').onclick=closeSheet;
+  $('#tSave').onclick=()=>{
+    const a=num($('#tA').value);if(!(a>0)){$('#tA').focus();toast('Enter an amount above zero');return}
+    const n={id:it.id||uid(),amount:neg?-a:a,date:$('#tD').value||today(),note:$('#tN').value.trim(),ts:it.ts||Date.now()};
+    if(t)Object.assign(t,n);else db.savings.tops.push(n);
+    save();closeSheet();renderSavings();
+  };
+  if(t)$('#tDel').onclick=()=>{if(!confirm('Delete this entry?'))return;db.savings.tops=db.savings.tops.filter(x=>x.id!==t.id);save();closeSheet();renderSavings()};
+  if(!t)setTimeout(()=>$('#tA').focus(),250);
+}
+
+/* ---------- WISHLIST ---------- */
+const LINK_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>';
+function cleanUrl(u){u=String(u||'').trim();if(!u)return '';if(!/^[a-z]+:\/\//i.test(u))u='https://'+u;try{const x=new URL(u);return /^https?:$/.test(x.protocol)?x.href:''}catch(e){return ''}}
+const host=u=>{try{return new URL(u).hostname.replace(/^www\./,'')}catch(e){return u}};
+function renderWish(){
+  const list=[...db.wish].sort((a,b)=>b.ts-a.ts);
+  $('#wTotal').textContent=fm(sumOf(list));
+  $('#wCount').textContent=list.length?list.length+(list.length===1?' wish':' wishes'):'';
+  $('#wishList').innerHTML=list.length?list.map(w=>`<div class="wc"><button class="wb" data-wish="${esc(w.id)}"><b>${esc(w.name)}</b><span class="amt num">${fm(w.amount)}</span></button>${w.url?`<a href="${esc(w.url)}" target="_blank" rel="noopener noreferrer"><span>${esc(host(w.url))}</span>${LINK_SVG}</a>`:'<div class="nolink">No link</div>'}</div>`).join(''):'<div class="empty" style="grid-column:1/-1">Your wishlist is empty. Tap “+” to add something you want.</div>';
+}
+$('#wishList').addEventListener('click',e=>{const b=e.target.closest('[data-wish]');if(b)wishForm(db.wish.find(x=>x.id===b.dataset.wish))});
+function wishForm(w){
+  const it=w||{id:'',name:'',amount:'',url:''};
+  openSheet(`<h3>${w?'Wish':'New wish'}</h3>
+  <label for="wN">Name</label><input class="f" id="wN" value="${esc(it.name)}" placeholder="e.g. New bike">
+  <label for="wA">Price, ₴</label><input class="f big-amt" id="wA" inputmode="decimal" placeholder="0" value="${it.amount===''?'':esc(it.amount)}">
+  <label for="wU">Link</label><input class="f" id="wU" type="url" inputmode="url" autocapitalize="off" value="${esc(it.url)}" placeholder="Paste a link to the shop page">
+  <div class="acts"><button class="btn" id="wSave">Save</button><button class="btn ghost" id="wCancel">Cancel</button></div>
+  ${w?'<div class="acts"><button class="btn danger" id="wDel">Delete</button></div>':''}`);
+  $('#wCancel').onclick=closeSheet;
+  $('#wSave').onclick=()=>{
+    const name=$('#wN').value.trim(),raw=$('#wU').value.trim(),url=cleanUrl(raw),amount=$('#wA').value.trim()===''?0:num($('#wA').value);
+    if(!name){$('#wN').focus();toast('Enter a name');return}
+    if(!(amount>=0)){$('#wA').focus();toast('Enter a price');return}
+    if(raw&&!url){$('#wU').focus();toast('This link does not look right');return}
+    const n={id:it.id||uid(),name,amount,url,ts:it.ts||Date.now()};
+    if(w)Object.assign(w,n);else db.wish.push(n);
+    save();closeSheet();renderWish();
+  };
+  if(w)$('#wDel').onclick=()=>{if(!confirm('Delete “'+w.name+'”?'))return;db.wish=db.wish.filter(x=>x.id!==w.id);save();closeSheet();renderWish()};
+  if(!w)setTimeout(()=>$('#wN').focus(),250);
+}
 $('#bPrev').addEventListener('click',()=>{budM.setMonth(budM.getMonth()-1);renderMonth()});
 $('#bNext').addEventListener('click',()=>{budM.setMonth(budM.getMonth()+1);renderMonth()});
 $('#addInc').addEventListener('click',()=>lifeForm('income'));
@@ -667,7 +775,7 @@ function settingsSheet(){
   <h4>Backup</h4>
   <div class="card"><p class="mute small" style="margin:0 0 .625rem">All data lives only on this phone. Save a copy to Files from time to time so nothing gets lost.</p>
   <div class="acts" style="margin-top:0"><button class="btn ghost" id="sExp">Save backup</button><label class="btn ghost filebtn">Restore<input type="file" id="sImp" accept=".json,application/json" hidden></label></div></div>
-  <p class="mute small">Tasks: ${db.events.length} · Income items: ${db.life.income.length} · Must-pay: ${db.life.fixed.length} · Planned expenses: ${db.plan.length} · Notes: ${db.notes.length}<br>Version ${APP_VERSION}</p>
+  <p class="mute small">Tasks: ${db.events.length} · Income items: ${db.life.income.length} · Must-pay: ${db.life.fixed.length} · Planned expenses: ${db.plan.length} · Savings entries: ${db.savings.tops.length} · Wishes: ${db.wish.length} · Notes: ${db.notes.length}<br>Version ${APP_VERSION}</p>
   <div class="acts"><button class="btn ghost" id="sIntro">Show start screen</button><button class="btn" id="sClose">Close</button></div>`);
   const pick=(id,key,conv)=>$(id).addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
     $$(id+' button').forEach(x=>x.classList.toggle('on',x===b));db.settings[key]=conv(b.dataset.v);save();applyLook()});
@@ -685,13 +793,14 @@ function settingsSheet(){
     r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.events)||!Array.isArray(d.notes))throw 0;
       if(!confirm('Replace current data with the backup?'))return;
       db={events:d.events.map(x=>Object.assign({done:false},x)),life:d.life&&Array.isArray(d.life.income)?d.life:{income:[],fixed:[]},plan:Array.isArray(d.plan)?d.plan:[],notes:d.notes,
-        profile:Object.assign({first:'',last:'',goal:'',photo:''},d.profile),settings:Object.assign({font:120,theme:'system'},d.settings)};
-      save();applyLook();closeSheet();renderAll();toast('Data restored')}catch(err){toast('This does not look like a backup file')}};
+        wish:Array.isArray(d.wish)?d.wish:[],savings:Object.assign({start:0,tops:[]},d.savings),
+        profile:Object.assign({first:'',last:'',goal:'',photo:''},d.profile),settings:Object.assign({font:120,theme:'system',incog:false},d.settings)};
+      save();applyLook();applyIncog();closeSheet();renderAll();toast('Data restored')}catch(err){toast('This does not look like a backup file')}};
     r.readAsText(f)};
 }
 $('#setBtn').addEventListener('click',settingsSheet);
 
-function renderAll(){renderHome();renderTasks();renderCash();renderNotes()}
+function renderAll(){renderHome();renderTasks();renderCash();renderNotes();renderWish()}
 renderAll();
 setInterval(()=>{checkReminders(false);renderTasks();if(view==='home')renderHome()},20000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){checkReminders(false);renderTasks();renderHome()}});
