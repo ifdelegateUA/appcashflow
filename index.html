@@ -276,7 +276,7 @@ textarea.f{min-height:6.875rem;resize:vertical}
     <div class="list" id="mFixList"></div>
   </div>
   <div class="pane" id="savePane">
-    <div class="mute small">Total savings</div>
+    <div class="mute small">Total savings, USD</div>
     <div class="bal num" id="sTotal"></div>
     <div class="two" style="margin-top:.75rem">
       <button class="card" id="sStartBtn" style="text-align:left"><span class="mute small">Starting amount · edit</span><b class="big num" id="sStart"></b></button>
@@ -309,7 +309,7 @@ textarea.f{min-height:6.875rem;resize:vertical}
 
 <script>
 {
-const APP_VERSION='2.3';
+const APP_VERSION='2.4';
 const KEY='organizer.v2',OLD='organizer.v1';
 const $=s=>document.querySelector(s);
 const $$=s=>document.querySelectorAll(s);
@@ -327,6 +327,7 @@ const CAT_P=['Groceries','Cafes & restaurants','Transport','Health','Clothing','
 const FIX_S=['Rent','Utilities','Phone & internet','Loan payment','Insurance','Subscriptions','Kindergarten / school','Transport pass'];
 const INC_S=['Salary','Side job','Freelance','Rental income','Pension','Other'];
 const fm=v=>{const a=Math.abs(Math.round(v*100)/100);return (v<0?'−':'')+'₴'+a.toLocaleString('en-US',{minimumFractionDigits:a%1?2:0,maximumFractionDigits:2})};
+const fmUsd=v=>{const a=Math.abs(Math.round(v*100)/100);return (v<0?'−':'')+'$'+a.toLocaleString('en-US',{minimumFractionDigits:a%1?2:0,maximumFractionDigits:2})};
 const num=s=>Math.round(parseFloat(String(s).replace(/\s/g,'').replace(',','.'))*100)/100;
 const USER_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>';
 
@@ -612,14 +613,14 @@ function renderSavings(){
   const sv=db.savings,k=mKey(new Date());
   const tops=[...sv.tops].sort((a,b)=>b.date.localeCompare(a.date)||b.ts-a.ts);
   const total=sv.start+sumOf(sv.tops),mon=sumOf(sv.tops.filter(t=>t.date.slice(0,7)===k));
-  $('#sTotal').textContent=fm(total);$('#sStart').textContent=fm(sv.start);$('#sMonth').textContent=(mon>0?'+':'')+fm(mon);
+  $('#sTotal').textContent=fmUsd(total);$('#sStart').textContent=fmUsd(sv.start);$('#sMonth').textContent=(mon>0?'+':'')+fmUsd(mon);
   $('#sMonth').className='big num '+(mon<0?'exp':'inc');
-  $('#topList').innerHTML=tops.length?tops.map(t=>`<button class="card line" data-top="${esc(t.id)}"><span class="sp"><b>${t.amount<0?'Withdrawal':'Top-up'}</b><div class="mute small">${esc(shortDate(t.date)+' '+t.date.slice(0,4))}${t.note?' · '+esc(t.note):''}</div></span><span class="v ${t.amount<0?'exp':'inc'}">${t.amount<0?'':'+'}${fm(t.amount)}</span></button>`).join(''):'<div class="empty">Every time you put money aside, add a top-up here.</div>';
+  $('#topList').innerHTML=tops.length?tops.map(t=>`<button class="card line" data-top="${esc(t.id)}"><span class="sp"><b>${t.amount<0?'Withdrawal':'Top-up'}</b><div class="mute small">${esc(shortDate(t.date)+' '+t.date.slice(0,4))}${t.note?' · '+esc(t.note):''}</div></span><span class="v ${t.amount<0?'exp':'inc'}">${t.amount<0?'':'+'}${fmUsd(t.amount)}</span></button>`).join(''):'<div class="empty">Every time you put money aside, add a top-up here.</div>';
 }
 function renderCash(){renderLife();renderMonth();renderSavings()}
 $('#sStartBtn').addEventListener('click',()=>{
   openSheet(`<h3>Savings you have now</h3><p class="hint">How much you have saved before you started tracking top-ups.</p>
-  <label for="svA">Amount, ₴</label><input class="f big-amt" id="svA" inputmode="decimal" placeholder="0" value="${db.savings.start||''}">
+  <label for="svA">Amount, $</label><input class="f big-amt" id="svA" inputmode="decimal" placeholder="0" value="${db.savings.start||''}">
   <div class="acts"><button class="btn" id="svSave">Save</button><button class="btn ghost" id="svCancel">Cancel</button></div>`);
   $('#svCancel').onclick=closeSheet;
   $('#svSave').onclick=()=>{const v=$('#svA').value.trim()===''?0:num($('#svA').value);if(!(v>=0)){toast('Enter an amount');return}db.savings.start=v;save();closeSheet();renderSavings()};
@@ -630,7 +631,7 @@ function topForm(t){
   const it=t||{id:'',amount:'',date:today(),note:''};let neg=t?t.amount<0:false;
   openSheet(`<h3>${t?'Edit':'Add'} ${neg?'withdrawal':'top-up'}</h3>
   <div class="seg" id="tType"><button data-t="in" class="${neg?'':'on'}">Top-up</button><button data-t="out" class="${neg?'on':''}">Withdrawal</button></div>
-  <label for="tA">Amount, ₴</label><input class="f big-amt" id="tA" inputmode="decimal" placeholder="0" value="${it.amount===''?'':Math.abs(it.amount)}">
+  <label for="tA">Amount, $</label><input class="f big-amt" id="tA" inputmode="decimal" placeholder="0" value="${it.amount===''?'':Math.abs(it.amount)}">
   <label for="tD">Date</label><input class="f" type="date" id="tD" value="${esc(it.date)}">
   <label for="tN">Comment</label><input class="f" id="tN" value="${esc(it.note)}" placeholder="Optional, e.g. From salary">
   <div class="acts"><button class="btn" id="tSave">Save</button><button class="btn ghost" id="tCancel">Cancel</button></div>
@@ -689,6 +690,7 @@ $('#cash').addEventListener('click',e=>{
   if(b=e.target.closest('[data-inc]'))lifeForm('income',db.life.income.find(x=>x.id===b.dataset.inc));
   else if(b=e.target.closest('[data-fix]'))lifeForm('fixed',db.life.fixed.find(x=>x.id===b.dataset.fix));
   else if(b=e.target.closest('[data-plan]'))planForm(db.plan.find(x=>x.id===b.dataset.plan));
+  else if(b=e.target.closest('[data-top]'))topForm(db.savings.tops.find(x=>x.id===b.dataset.top));
 });
 function lifeForm(kind,item){
   const isInc=kind==='income',it=item||{id:'',name:'',amount:''};
